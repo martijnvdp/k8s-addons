@@ -1,6 +1,7 @@
 ---
 name: release-APP_NAME
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
