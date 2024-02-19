@@ -13,5 +13,4 @@ jobs:
   call-release-workflow:
     uses: ./.github/workflows/release.yaml
     with:
-      appname: APP_NAME
-    needs: [changes]
+      application_name: APP_NAME
