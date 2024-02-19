@@ -40,6 +40,6 @@ jobs:
       matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
       fail-fast: false
     steps:
-      - uses: ./.github/workflows/sandbox-k8s-addon-release.yml
+      - uses: ./.github/workflows/release.yml
         with:
           appname: ${{ matrix.application }}
