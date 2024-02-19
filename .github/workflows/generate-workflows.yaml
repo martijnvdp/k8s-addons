@@ -3,7 +3,7 @@ name: generate-workflows
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - deployments/**
 
