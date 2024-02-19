@@ -1,0 +1,35 @@
+---
+name: release cluster-operator
+
+on:
+  workflow_dispatch:
+    inputs:
+      appname:
+        description: "Name of the deployment"
+        required: true
+        type: string
+
+jobs:
+  sandbox:
+    runs-on: ubuntu-latest
+    environment: sandbox
+    steps:
+      - uses: actions/checkout@v3
+      - uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{ inputs.appname }}-sandbox
+          force_push_tag: true
+
+  prod:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [sandbox]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{ matrix.application }}-production
+          force_push_tag: true
+      - uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{ inputs.appname }}-prod
