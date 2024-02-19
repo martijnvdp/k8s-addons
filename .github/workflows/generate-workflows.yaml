@@ -37,14 +37,17 @@ jobs:
         id: check_workflow_file
         uses: andstor/file-existence-action@v3
         with:
-          files: "./.github/workflows/release-${{ steps.matrix.outputs.application_matrix }}.yaml"
+          files: "./.github/workflows/release-${{ fromJSON(steps.matrix.outputs.application_matrix.matrix) }}.yaml"
 
   create-app-workflow:
     permissions:
       contents: write
     runs-on: ubuntu-latest
     needs: [changes]
-    if: ${{ needs.changes.outputs.application_matrix }} && steps.check_files.outputs.files_exists != 'true'
+    if: ${{ needs.changes.outputs.application_matrix }} && changes.outputs.workflow_file_exist != 'true'
+    strategy:
+      matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
+      fail-fast: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
