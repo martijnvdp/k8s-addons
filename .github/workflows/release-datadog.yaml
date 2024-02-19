@@ -1,0 +1,16 @@
+---
+name: release-datadog
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - deployments/datadog/**
+  workflow_call:
+
+jobs:
+  call-release-workflow:
+    uses: ./.github/workflows/release.yaml
+    with:
+      application_name: datadog
