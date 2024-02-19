@@ -59,7 +59,7 @@ jobs:
         if: steps.check_workflow_file.outputs.workflow_file_exist != 'true'
         run: |
           cp ./.github/workflows/release-template.tpl ./.github/workflows/release-${{ matrix.application }}.yaml
-          sed -i 's/APP_NAME/${{ matrix.application }/g' ./.github/workflows/release-${{ matrix.application }}.yaml
+          sed -i 's/APP_NAME/${{ matrix.application }}/g' ./.github/workflows/release-${{ matrix.application }}.yaml
       - name: commit and merge workflow file
         if: steps.check_workflow_file.outputs.workflow_file_exist != 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
