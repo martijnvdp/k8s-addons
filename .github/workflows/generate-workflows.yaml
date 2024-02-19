@@ -48,7 +48,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ TOKEN }}
+          token: ${{ secrets.TOKEN }}
           fetch-depth: 0
       - name: Check if workflow file exist
         id: check_workflow_file
