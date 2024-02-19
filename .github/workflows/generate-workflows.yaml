@@ -33,18 +33,13 @@ jobs:
         run: |
           application_matrix="$(python .github/workflows/generate_jobs.py ${{ steps.filter.outputs.changes_files }})"
           echo "application_matrix=$application_matrix" >> $GITHUB_OUTPUT
-      - name: Check if workflow file exist
-        id: check_workflow_file
-        uses: andstor/file-existence-action@v3
-        with:
-          files: "./.github/workflows/release-${{ fromJson(steps.matrix.outputs.application_matrix).matrix }}.yaml"
 
   create-app-workflow:
     permissions:
       contents: write
     runs-on: ubuntu-latest
     needs: [changes]
-    if: ${{ needs.changes.outputs.application_matrix }} && changes.outputs.workflow_file_exist != 'true'
+    if: ${{ needs.changes.outputs.application_matrix }}
     strategy:
       matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
       fail-fast: false
@@ -54,11 +49,18 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+      - name: Check if workflow file exist
+        id: check_workflow_file
+        uses: andstor/file-existence-action@v3
+        with:
+          files: "./.github/workflows/release-${{ fromJson(steps.matrix.outputs.application_matrix).matrix }}.yaml"
       - name: create workflow file
+        if: steps.check_workflow_file.outputs.workflow_file_exist != 'true'
         run: |
           cp ./.github/workflows/release-template.tpl ./.github/workflows/release-${{ matrix.application }}.yaml
           sed -i 's/APP_NAME/datadog/g' ./.github/workflows/release-${{ matrix.application }}.yaml
       - name: merge workflow file
+        if: steps.check_workflow_file.outputs.workflow_file_exist != 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
         # with:
         #   commit_message: "Auto created release workflow for ${{ matrix.application }}."
