@@ -59,9 +59,11 @@ jobs:
         run: |
           cp ./.github/workflows/release-template.tpl ./.github/workflows/release-${{ matrix.application }}.yaml
           sed -i 's/APP_NAME/datadog/g' ./.github/workflows/release-${{ matrix.application }}.yaml
-      - name: merge workflow file
-        if: steps.check_workflow_file.outputs.workflow_file_exist != 'true'
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_author: Author <actions@github.com> 
-          commit_message: "Auto created release workflow for ${{ matrix.application }}."
+      - name: commit and merge workflow file
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull github ${GITHUB_REF} --ff-only
+          git add *
+          git commit -m "Created workflow file for ${{ matrix.application }}." || true
+          git push github HEAD:${GITHUB_REF}
