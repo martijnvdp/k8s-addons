@@ -37,7 +37,7 @@ jobs:
         id: check_workflow_file
         uses: andstor/file-existence-action@v3
         with:
-          files: "./.github/workflows/release-${{ fromJSON(steps.matrix.outputs.application_matrix.matrix) }}.yaml"
+          files: "./.github/workflows/release-${{ steps.matrix.outputs.application_matrix.matrix }}.yaml"
 
   create-app-workflow:
     permissions:
