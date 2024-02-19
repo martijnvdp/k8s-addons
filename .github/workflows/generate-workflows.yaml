@@ -62,5 +62,6 @@ jobs:
       - name: merge workflow file
         if: steps.check_workflow_file.outputs.workflow_file_exist != 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
-        # with:
-        #   commit_message: "Auto created release workflow for ${{ matrix.application }}."
+        with:
+          commit_author: Author <actions@github.com> 
+          commit_message: "Auto created release workflow for ${{ matrix.application }}."
