@@ -1,0 +1,45 @@
+---
+name: generate-workflows
+on:
+  push:
+    branches:
+      - "master"
+    paths:
+      - "deployments/**"
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      application_matrix: ${{ steps.matrix.outputs.application_matrix }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2.11.1
+        name: Get changed manifests
+        id: filter
+        with:
+          list-files: csv
+          filters: |
+            changes:
+              - added|modified: 'deployments/**'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+          architecture: "x64"
+      - id: matrix
+        name: Generate application matrix
+        run: |
+          application_matrix="$(python .github/workflows/generate_jobs.py ${{ steps.filter.outputs.changes_files }})"
+          echo "application_matrix=$application_matrix" >> $GITHUB_OUTPUT
+  call-release-workflow:
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: ${{ needs.changes.outputs.application_matrix }}
+    strategy:
+      matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
+      fail-fast: false
+    steps:
+      - uses: ./.github/workflows/sandbox-k8s-addon-release.yml
+        with:
+          appname: ${{ matrix.application }}
