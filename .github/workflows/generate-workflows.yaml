@@ -34,7 +34,7 @@ jobs:
           echo "application_matrix=$application_matrix" >> $GITHUB_OUTPUT
 
   call-release-workflow:
-    uses: ./.github/workflows/release.yml@main
+    uses: ./.github/workflows/release.yml
     with:
       appname: ${{ matrix.application }}
     needs: [changes]
