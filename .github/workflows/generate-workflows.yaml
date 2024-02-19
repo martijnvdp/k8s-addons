@@ -3,9 +3,9 @@ name: generate-workflows
 on:
   push:
     branches:
-      - "master"
+      - master
     paths:
-      - "deployments/**"
+      - deployments/**
 
 jobs:
   changes:
@@ -32,6 +32,7 @@ jobs:
         run: |
           application_matrix="$(python .github/workflows/generate_jobs.py ${{ steps.filter.outputs.changes_files }})"
           echo "application_matrix=$application_matrix" >> $GITHUB_OUTPUT
+
   call-release-workflow:
     runs-on: ubuntu-latest
     needs: [changes]
