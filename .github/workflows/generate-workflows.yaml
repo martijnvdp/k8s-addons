@@ -63,10 +63,10 @@ jobs:
           git commit -m "Auto created release workflow for ${{ matrix.application }}." || true
           git push github HEAD:${GITHUB_REF}
 
-  call-release-workflow:
-    uses: ./.github/workflows/release-${{ matrix.application }}.yaml
-    needs: [changes, create-app-workflow]
-    if: ${{ needs.changes.outputs.application_matrix }} && steps.check_files.outputs.files_exists != 'true'
-    strategy:
-      matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
-      fail-fast: false
+  # call-release-workflow:
+  #   uses: ./.github/workflows/release-${{ matrix.application }}.yaml
+  #   needs: [changes, create-app-workflow]
+  #   if: ${{ needs.changes.outputs.application_matrix }} && steps.check_files.outputs.files_exists != 'true'
+  #   strategy:
+  #     matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
+  #     fail-fast: false
