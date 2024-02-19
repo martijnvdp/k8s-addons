@@ -2,7 +2,7 @@
 name: release
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       appname:
         description: "Name of the deployment"
