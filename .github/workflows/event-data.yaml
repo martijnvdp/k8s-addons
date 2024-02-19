@@ -1,5 +1,6 @@
 ---
 name: event-data
+run-name: event-data ${{event.commits.0.message}} by @${{ github.actor }}
 on:
   pull_request:
     types: [opened, closed, reopened]
