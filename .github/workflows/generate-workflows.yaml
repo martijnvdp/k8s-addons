@@ -41,6 +41,6 @@ jobs:
       matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
       fail-fast: false
     steps:
-      - uses: ./.github/workflows/release.yml
+      - uses: ./.github/workflows/release.yml@main
         with:
           appname: ${{ matrix.application }}
