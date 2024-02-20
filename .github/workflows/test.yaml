@@ -41,7 +41,8 @@ jobs:
   output:
     name: Print output
     runs-on: ubuntu-latest
+    needs: [changes]
     steps:
     - name: print output
       run: |
-        echo "${{outputs.changes.workflow_file_exist}}"
+        echo "${{needs.changes.outputs.workflow_file_exist}}"
