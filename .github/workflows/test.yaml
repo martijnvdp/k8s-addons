@@ -40,6 +40,8 @@ jobs:
       matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
       fail-fast: false
     steps:
+    - name: Check out code
+      uses: actions/checkout@v4
     - name: check file
       id: check_workflow_file
       uses: andstor/file-existence-action@v3
