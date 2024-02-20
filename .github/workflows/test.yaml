@@ -48,6 +48,6 @@ jobs:
       with:
         files: "./.github/workflows/release-${{matrix.application}}.yaml"
     - name: print output
-      if: steps.check_workflow_file.outputs.files_exist != 'true'
+      if: steps.check_workflow_file.outputs.files_exists != 'true'
       run: |
-        echo "${{needs.changes.outputs.workflow_file_exist}}"
+        echo "not true ${{ steps.check_workflow_file.outputs.files_exists }}"
