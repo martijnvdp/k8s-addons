@@ -1,0 +1,47 @@
+---
+name: test
+on:
+  pull_request:
+    types: [opened, closed, reopened]
+  push:
+    branches:
+      - main
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      application_matrix: ${{ steps.matrix.outputs.application_matrix }}
+      workflow_file_exist: ${{ steps.check_workflow_file.outputs.files_exists }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2.11.1
+        name: Get changed manifests
+        id: filter
+        with:
+          list-files: csv
+          filters: |
+            changes:
+              - added|modified: 'deployments/**'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+          architecture: "x64"
+      - id: matrix
+        name: Generate application matrix
+        run: |
+          application_matrix="$(python .github/workflows/generate_jobs.py ${{ steps.filter.outputs.changes_files }})"
+          echo "application_matrix=$application_matrix" >> $GITHUB_OUTPUT
+      - name: Check if workflow file exist
+        id: check_workflow_file
+        uses: andstor/file-existence-action@v3
+        with:
+          files: "./.github/workflows/release-${{ fromJSON(steps.matrix.outputs.application_matrix).application }}.yaml"
+
+  output:
+    name: Print output
+    runs-on: ubuntu-latest
+    steps:
+    - name: print output
+      run: |
+        echo "${{outputs.changes.workflow_file_exist}}"
