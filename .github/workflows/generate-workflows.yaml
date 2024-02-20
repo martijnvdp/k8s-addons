@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       application_matrix: ${{ steps.matrix.outputs.application_matrix }}
-      workflow_file_exist: ${{ steps.check_workflow_file.outputs.files_exists }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
