@@ -36,6 +36,9 @@ jobs:
     name: Print output
     runs-on: ubuntu-latest
     needs: [changes]
+    strategy:
+      matrix: ${{ fromJSON(needs.changes.outputs.application_matrix) }}
+      fail-fast: false
     steps:
     - name: check file
       id: check_workflow_file
