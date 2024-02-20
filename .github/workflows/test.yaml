@@ -41,7 +41,7 @@ jobs:
       id: check_workflow_file
       uses: andstor/file-existence-action@v3
       with:
-        files: "./.github/workflows/release-matrix.application.yaml"
+        files: "./.github/workflows/release-${{matrix.application}}.yaml"
     - name: print output
       if: steps.check_workflow_file.outputs.workflow_file_exist != 'true'
       run: |
